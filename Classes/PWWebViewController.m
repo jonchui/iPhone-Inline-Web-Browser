@@ -52,10 +52,7 @@
 	_webView = [[UIWebView alloc] initWithFrame:CGRectMake(frame.origin.x, frame.origin.y, frame.size.width, frame.size.height - 44.0)];
 	_webView.delegate = self;
 	_webView.scalesPageToFit = YES;
-	_webView.autoresizingMask = (UIViewAutoresizingFlexibleLeftMargin |
-								 UIViewAutoresizingFlexibleWidth |
-								 UIViewAutoresizingFlexibleRightMargin | 
-								 UIViewAutoresizingFlexibleTopMargin |
+	_webView.autoresizingMask = (UIViewAutoresizingFlexibleWidth |
 								 UIViewAutoresizingFlexibleHeight |
 								 UIViewAutoresizingFlexibleBottomMargin);
 	[self.view addSubview:_webView];
@@ -93,12 +90,9 @@
 	
 	// Setup toolbar
 	_toolbar.frame = CGRectMake(frame.origin.x, frame.origin.y + frame.size.height - 44.0, frame.size.width, 44.0);
-	_toolbar.autoresizingMask = (UIViewAutoresizingFlexibleLeftMargin |
-								 UIViewAutoresizingFlexibleWidth |
-								 UIViewAutoresizingFlexibleRightMargin | 
+	_toolbar.autoresizingMask = (UIViewAutoresizingFlexibleWidth |
 								 UIViewAutoresizingFlexibleTopMargin |
-								 UIViewAutoresizingFlexibleHeight |
-								 UIViewAutoresizingFlexibleBottomMargin);
+								 UIViewAutoresizingFlexibleHeight);
 	[self.view addSubview:_toolbar];
 	
 	// Flexible space
