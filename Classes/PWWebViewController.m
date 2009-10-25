@@ -2,8 +2,18 @@
 //  PWWebViewController.m
 //  PWWebViewController
 //
-//  Created by Matthias Plappert on 24.10.09.
-//  Copyright 2009 phapswebsolutions. All rights reserved.
+//  Copyright (c) 2009 Matthias Plappert <mplappert@phaps.de>
+//  
+//  Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated
+//  documentation files (the "Software"), to deal in the Software without restriction, including without limitation
+//  the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and
+//  to permit persons to whom the Software is furnished to do so, subject to the following conditions:
+//  The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
+//  
+//  THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE
+//  WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR
+//  COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE,
+//  ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 //
 
 #import "PWWebViewController.h"
@@ -23,32 +33,23 @@
     if (self = [super init]) {
         _request = [request retain];
 		self.hidesBottomBarWhenPushed = YES;
+		
+		// Create toolbar (to make sure that we can access it at any time)
+		_toolbar = [[UIToolbar alloc] initWithFrame:CGRectZero];
     }
     return self;
 }
 
 - (void)loadView
 {
+	// Loads correctly setup view. We setup the view in portrait mode and it get's transformed by the auto resizing.
+	[super loadView];
+	
 	// Get frames
-	CGRect screenRect = self.navigationController.view.frame;
-	CGRect navigationBarFrame = self.navigationController.navigationBar.frame;
-	
-	// Get status bar frame. Check if it is not zero and than make width + height 20.0. Seems like a bug in iPhone OS
-	CGRect statusRect = [UIApplication sharedApplication].statusBarFrame;
-	if (statusRect.size.width != 0.0 && statusRect.size.height != 0.0) {
-		statusRect.size.width = statusRect.size.height = 20.0;
-	}
-	
-	// Create final view rect
-	CGRect frame = CGRectMake(0.0, 0.0, screenRect.size.width, screenRect.size.height - statusRect.size.height - navigationBarFrame.size.height);
-	
-	// Simple background view
-	UIView *view = [[UIView alloc] initWithFrame:frame];
-	self.view = view;
-	[view release];
+	CGRect frame = self.view.bounds;
 	
 	// Load web view
-	_webView = [[UIWebView alloc] initWithFrame:CGRectMake(frame.origin.x, frame.origin.y, frame.size.width, frame.size.height - navigationBarFrame.size.height)];
+	_webView = [[UIWebView alloc] initWithFrame:CGRectMake(frame.origin.x, frame.origin.y, frame.size.width, frame.size.height - 44.0)];
 	_webView.delegate = self;
 	_webView.scalesPageToFit = YES;
 	_webView.autoresizingMask = (UIViewAutoresizingFlexibleLeftMargin |
@@ -90,8 +91,8 @@
 												  action:@selector(goBack)];
 	_backButton.enabled = NO;
 	
-	// Create toolbar
-	_toolbar = [[UIToolbar alloc] initWithFrame:CGRectMake(frame.origin.x, frame.origin.y + frame.size.height - navigationBarFrame.size.height, frame.size.width, navigationBarFrame.size.height)];
+	// Setup toolbar
+	_toolbar.frame = CGRectMake(frame.origin.x, frame.origin.y + frame.size.height - 44.0, frame.size.width, 44.0);
 	_toolbar.autoresizingMask = (UIViewAutoresizingFlexibleLeftMargin |
 								 UIViewAutoresizingFlexibleWidth |
 								 UIViewAutoresizingFlexibleRightMargin | 
@@ -165,6 +166,11 @@
 - (UIWebView *)webView
 {
 	return _webView;
+}
+
+- (UIToolbar *)toolbar
+{
+	return _toolbar;
 }
 
 #pragma mark -
